@@ -4,3 +4,4 @@ prompt_checking/
 
 modules/__pycache__/
 .env
+venv/
