@@ -3,35 +3,37 @@
 function checkingNumbers(number) {
     let raw = number;
     let phone = raw.toString().trim();
-    
+
     phone = phone.replace(/[\s\-().]/g, '');
-    if (phone.startsWith('+92') || phone.startsWith('+1')) {
+
+    console.log(phone)
+    if (phone.startsWith('+1') && phone.length === 12) {
+        console.log("1")
         return { json: { phone: phone } };
     }
-
-    if (
-        phone.startsWith('0092') ||
-        phone.startsWith('92') ||
-        phone.startsWith('03') ||
-        (phone.length === 10 && phone.startsWith('3'))
-    ) {
-        phone = phone.replace(/^0092/, '');
-        phone = phone.replace(/^92/, '');
-        phone = phone.replace(/^0/, '');
-        phone = '+92' + phone;
-        return { json: { phone: phone } };
-    }
-
-    if (
-        phone.startsWith('001') ||
-        (phone.startsWith('1') && phone.length === 11) ||
-        phone.length === 10
-    ) {
+    
+    if (phone.startsWith('001') && phone.length === 13) {
+        console.log("2")
         phone = phone.replace(/^001/, '');
-        phone = phone.replace(/^1/, '');
         phone = '+1' + phone;
         return { json: { phone: phone } };
-    } else { return { json: { phone: raw, warning: 'Unrecognized format' } }; }
+    }
+    
+    if (phone.startsWith('1') && phone.length === 11) {
+        console.log("3")
+        phone = '+1'+ phone.slice(1);
+        return { json: { phone: phone } };
+    }
+    
+    if (/^\d{10}$/.test(phone)) {
+        console.log("4")
+        phone = '+1' + phone;
+        return { json: { phone: phone } };
+    }
+
+    return { json: { phone: raw, warning: 'Unrecognized US number format (must start with 1 or be 10 digits)' } };
 }
 
-console.log(checkingNumbers("03146260032"))
+const number = "001-324-456-7890"
+// console.log(number.length)
+console.log(checkingNumbers(number))
