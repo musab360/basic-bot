@@ -1,4 +1,6 @@
 .venv/
 __pycache__/
+prompt_checking/
 
+modules/__pycache__/
 .env
