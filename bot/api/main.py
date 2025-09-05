@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from langchain_openai import OpenAIEmbeddings
 from dotenv import load_dotenv
 import os
-from tortoise.contrib.fastapi import register_tortoise # For DB
+# from tortoise.contrib.fastapi import register_tortoise # For DB
 # My files
 from system_prompt import system_prompt
 from conatct_prompt import form_prompt
