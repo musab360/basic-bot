@@ -12,8 +12,8 @@ from dotenv import load_dotenv
 import os
 # from tortoise.contrib.fastapi import register_tortoise # For DB
 # My files
-from system_prompt import system_prompt
-from conatct_prompt import form_prompt
+# from system_prompt import system_prompt
+# from conatct_prompt import form_prompt
 
 load_dotenv()
 
@@ -44,6 +44,38 @@ documents = PineconeVectorStore.from_existing_index(
 retriever = documents.as_retriever(search_type = 'similarity', search_kwargs = {'k':3})
 
 llm = ChatOpenAI(api_key = OPENAI_API_KEY)
+
+def system_prompt(ChatPromptTemplate):
+    system_prompt = (
+        "You are an assistant for question-answering tasks. "
+        "Use the following pieces of retrieved context to answer "
+        "the question. If you don't know the answer, say that you "
+        "don't know. keep the "
+        "answer concise and short."
+        "Give the answers in markdown format"
+        "\n\n"
+        "{context}"
+    )
+
+    system_prompt = ChatPromptTemplate.from_messages(
+        [
+        ("system", system_prompt),
+        ("human", "{input}")
+        ])
+    return system_prompt
+
+def form_prompt(ChatPromptTemplate):
+    form_prompt = (
+        "You are the context identifier"
+        # "You will only tell that the user wants to stay in touch with you"
+        "give me the context in one word"
+    )
+
+    form_prompt = ChatPromptTemplate.from_messages([
+        ("system",form_prompt),
+        ('human', "{input}")
+    ])
+    return form_prompt
 
 chat_prompt = system_prompt(ChatPromptTemplate)
 question_answer_chain = create_stuff_documents_chain(llm, chat_prompt)
